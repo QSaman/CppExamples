@@ -1,0 +1,5 @@
+add_subdirectory(enum)
+add_subdirectory(i18n)
+add_subdirectory(miscellaneous)
+add_subdirectory(thread)
+add_subdirectory(time)
