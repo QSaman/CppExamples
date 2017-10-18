@@ -4,7 +4,7 @@
 
 using namespace std;
 
-mutex m;
+static mutex m;
 
 void f(int id)
 {
