@@ -4,7 +4,7 @@
 
 using namespace std;
 
-mutex m1, m2, m3;
+static mutex m1, m2, m3;
 
 void deadlock(int id)
 {
