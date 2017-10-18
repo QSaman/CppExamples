@@ -45,6 +45,6 @@ int main()
     std::mutex m_test;
     m_test.lock();
     //If you uncomment the following line, it's a deadlock! In other words you cannot see "Hello World!"
-    m_test.lock();
+    //m_test.lock();
     std::cout << "Hello There!" << std::endl;
 }
