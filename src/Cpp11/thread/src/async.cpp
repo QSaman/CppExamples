@@ -1,6 +1,8 @@
 #include <iostream>
 #include <future>
 #include <algorithm>
+#include <vector>
+#include <numeric>
 
 using vt = std::vector<int>::iterator;
 

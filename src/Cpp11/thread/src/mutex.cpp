@@ -42,4 +42,9 @@ int main()
     thread t6{h, 6};
     t5.join();
     t6.join();
+    std::mutex m_test;
+    m_test.lock();
+    //If you uncomment the following line, it's a deadlock! In other words you cannot see "Hello World!"
+    m_test.lock();
+    std::cout << "Hello There!" << std::endl;
 }
