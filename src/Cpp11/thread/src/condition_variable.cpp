@@ -8,10 +8,10 @@
 
 using namespace std;
 
-vector<string> messageList {"saman", "revan", "bastila", "galen", "juno", "anakin", "padme"};
-queue<string> messageQueue;
-mutex queueMutex;
-condition_variable messageCondition;
+static vector<string> messageList {"saman", "revan", "bastila", "galen", "juno", "anakin", "padme"};
+static queue<string> messageQueue;
+static mutex queueMutex;
+static condition_variable messageCondition;
 
 void producer()
 {
@@ -32,10 +32,10 @@ void producer()
 
 void consumer()
 {
-    for (int i = 0; i < messageList.size(); ++i)
+    for (vector<string>::size_type i = 0; i < messageList.size(); ++i)
     {
         unique_lock<mutex> lock{queueMutex};
-        messageCondition.wait(lock, [&messageQueue]{return !messageQueue.empty();});    //wait if messageQueue.empty() is true
+        messageCondition.wait(lock, []{return !messageQueue.empty();});    //wait if messageQueue.empty() is true
         auto message = messageQueue.front();
         messageQueue.pop();
         cout << "pop " << message << endl;  //I use lock for synchronizing cout
