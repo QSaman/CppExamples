@@ -2,6 +2,7 @@
 #include <future>
 #include <algorithm>
 #include <thread>
+#include <numeric>
 
 int accumulate(int* first, int* end, int init)
 {
