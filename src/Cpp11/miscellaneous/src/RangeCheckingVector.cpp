@@ -8,13 +8,14 @@ template<typename T>
 class MyVector : public vector<T>
 {
 public:
+    using size_type = typename vector<T>::size_type;
     using vector<T>::vector;
-    T& operator[](int i)
+    T& operator[](size_type i)
     {
         return vector<T>::at(i);
     }
 
-    T& operator[](int i) const
+    T& operator[](size_type i) const
     {
         return vector<T>::at(i);
     }
@@ -29,7 +30,7 @@ int main()
     //below statement raise an out_of_range exception
     try
     {
-        cout << v[v.size()] << endl;
+        cout << v[static_cast<unsigned int>(v.size())] << endl;
     }
     catch(out_of_range)
     {

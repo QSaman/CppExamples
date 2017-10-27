@@ -8,11 +8,12 @@ template<typename T>
 class Vector
 {
 public:
-    explicit Vector(int size) : size{size}
+    using size_type = typename initializer_list<T>::size_type;
+    explicit Vector(size_type size) : size{size}
     {
         cout << "conversion constructor" << endl;
         int* aTmp = new int[size];
-        for (int i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             aTmp[i] = i;
         a.reset(aTmp);
     }
@@ -79,7 +80,7 @@ public:
 
 private:
     unique_ptr<T> a;
-    int size;
+    size_type size;
 };
 
 template<typename C>

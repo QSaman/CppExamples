@@ -32,7 +32,8 @@ void producer()
 
 void consumer()
 {
-    for (vector<string>::size_type i = 0; i < messageList.size(); ++i)
+    using vector_size = vector<string>::size_type;
+    for (vector_size i = 0; i < messageList.size(); ++i)
     {
         unique_lock<mutex> lock{queueMutex};
         messageCondition.wait(lock, []{return !messageQueue.empty();});    //wait if messageQueue.empty() is true

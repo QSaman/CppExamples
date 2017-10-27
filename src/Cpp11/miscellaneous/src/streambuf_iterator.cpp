@@ -9,7 +9,7 @@
 
 using namespace std;
 
-string from, to;
+static string from, to;
 
 bool parseInput(int argc, char* argv[])
 {
@@ -35,8 +35,8 @@ int main(int argc, char* argv[])
 {
     if (!parseInput(argc, argv))
         return 1;
-    ifstream fin{from, std::ios::binary};
-    ofstream fout{to, std::ios::binary};
+    ifstream fin{from, ifstream::binary};
+    ofstream fout{to, ifstream::binary};
     copy(istreambuf_iterator<char>{fin},
          istreambuf_iterator<char>{},
          ostream_iterator<char>{fout});

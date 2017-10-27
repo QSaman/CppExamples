@@ -16,7 +16,7 @@ public:
 
 std::ostream& operator<<(std::ostream& out, const Record& r)
 {
-    std::cout << r.name;
+    out << r.name;
     return out;
 }
 
