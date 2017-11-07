@@ -12,6 +12,7 @@ int main()
     std::cout << "local:     " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
     // POSIX-specific:
     std::string tz = "TZ=Asia/Singapore";
-    putenv(tz.data());
+    //The following line is valid in C++11
+    putenv(&tz[0]);
     std::cout << "Singapore: " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
 }
