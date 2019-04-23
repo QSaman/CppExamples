@@ -9,7 +9,7 @@ template<typename T, typename... Args>
 void print_all(T arg, Args&&... args)
 {
 	std::cout << arg << ' ';
-        print_all(args...);
+        print_all(std::forward<Args>(args)...);
 }
 
 void print_all()
