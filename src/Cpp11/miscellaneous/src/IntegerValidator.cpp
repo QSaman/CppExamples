@@ -19,23 +19,50 @@ inline bool isInteger(std::string str_number, int64_t& integralPart)
 
 	int64_t fraction;
 	char ch;
+	char next;
+
+	if ((first + 1) < len && str_number[first] == '.' && std::isdigit(str_number[first + 1]))	// For handling .0
+		integralPart = 0;
+	else if ((first + 2) < len && (str_number[first] == '+' || str_number[first] == '-') && 	// For handling +.0 or -.0
+	         str_number[first + 1] == '.' && std::isdigit(str_number[first + 2]))
+	{
+		integralPart = 0;
+		iss >> ch;	//Discaring + or -
+	}
+	else if (!(iss >> integralPart))
+		return false;
 
 	//isInteger returns ture for these examples:
 	//7
 	//7.
 	//7.00
-	return iss >> integralPart && (iss.eof() || str_number[last] == '.' || (iss >> ch && ch == '.' && iss >> fraction && fraction == 0 && iss.eof()));
+	return iss.eof() ||	//For cases like 7	        
+		   (iss >> ch && ch == '.' && ((next = iss.peek()) == EOF || // For cases like 7.
+		   (std::isdigit(next) && iss >> fraction && fraction == 0 && iss.eof()))); // For handling 7.00. Note 7.+00 is invalid!
 }
 
 int main()
 {
 	int64_t number;
 
-	(isInteger("7", number) == true);
+	assert(isInteger("7", number) == true);
+	assert(isInteger("   +7     ", number) == true);
 	assert(isInteger("7.", number) == true);
 	assert(isInteger("7.00", number) == true);
 	
 	assert(isInteger(" 7. ", number) == true);
 	assert(isInteger("7.12", number) == false);
+	assert(isInteger(".", number) == false);
 
+	assert(isInteger(".0", number) == true);
+	assert(isInteger("+.0", number) == true);
+	assert(isInteger("-.0", number) == true);
+
+	assert(isInteger("7.+0", number) == false);
+
+	assert(isInteger("abc", number) == false);
+	assert(isInteger("123abc", number) == false);
+	assert(isInteger("123 456", number) == false);
+
+	assert(isInteger("7.0000000000000000000000000000000000000000000000000000000000001", number) == false);
 }
