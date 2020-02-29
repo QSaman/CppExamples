@@ -43,7 +43,7 @@ int main()
     cout << strUTF8_4 << endl;
     cout << "The output of wide string: ";
     //In Linux wchart_t is 4 bytes and in Windows it's 2 bytes
-    for (unsigned wchar_t ch : wideStr)
+    for (auto ch : wideStr)
         cout << hex << ch << ' ';
     cout << endl;
     cout << "The output of u16string: ";
