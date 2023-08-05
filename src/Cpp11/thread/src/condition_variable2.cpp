@@ -13,7 +13,7 @@ struct Context
 	std::mutex notify_worker_threads_mutex, notify_manager_thread_mutex, print_mutex;
 	bool are_all_workers_ready = false;
 	bool start_execution = false;
-	std::size_t waiting_workers_count = WORKERS_COUNT;
+	std::size_t unready_workers_count = WORKERS_COUNT;
 } ctx;
 
 std::atomic<bool> winner(false);
@@ -56,13 +56,13 @@ void work()
 			// and then ctx.notify_manager_thread_mutex so the manager waits for the
 			// last one before it asks all of them to start:
 			std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
-			if (--ctx.waiting_workers_count == 0)
+			if (--ctx.unready_workers_count == 0)
 			{
 				ctx.are_all_workers_ready = true;
 			}
 		}
 
-		if (ctx.waiting_workers_count == 0)
+		if (ctx.unready_workers_count == 0)
 		{
 			print("Worker with id " << std::this_thread::get_id() << " notifies the manager...");
 			// Since notify_one awakens the manager, the last worker should first release
