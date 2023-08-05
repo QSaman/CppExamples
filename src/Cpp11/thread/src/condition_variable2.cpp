@@ -52,7 +52,7 @@ void work()
 		std::unique_lock<std::mutex> unique_lock(ctx.notify_worker_threads_mutex);
 
 		{
-			// It's important the workers first acquires ctx.notify_worker_threads_mutex
+			// It's important the workers first acquire ctx.notify_worker_threads_mutex
 			// and then ctx.notify_manager_thread_mutex so the manager waits for the
 			// last one before it asks all of them to start:
 			std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
