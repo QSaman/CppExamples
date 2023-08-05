@@ -29,6 +29,8 @@ void notifyWorkers()
 	{
 		std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
 		print("Waiting for all workers to be ready...");
+		// Since a spurious wakeup is possible, it's better stop_waiting (second argument)
+		// is provided:
 		ctx.notify_manager_thread.wait(unique_lock, [](){return ctx.are_all_workers_ready;});
 		print("All workers are ready...");
 	}
@@ -74,6 +76,8 @@ void work()
 			ctx.notify_manager_thread.notify_one();
 		}
 		print("Worker with id " << std::this_thread::get_id() << " is waiting...");
+		// Since a spurious wakeup is possible, it's better stop_waiting (second argument)
+		// is provided:
 		ctx.notify_worker_threads.wait(unique_lock, [](){return ctx.start_execution;});
 		print("Worker with id " << std::this_thread::get_id() << " finished waiting...");
 	}
