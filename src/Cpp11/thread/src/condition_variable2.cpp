@@ -48,34 +48,29 @@ void notifyWorkers()
 
 void work()
 {
-	// We need to use this local variable so the manager waits for the last worker:
-	bool are_all_workers_ready = false;
-
-	{
-		std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
-		if (--ctx.waiting_workers_count == 0)
-		{
-			are_all_workers_ready = true;
-		}
-	}
-
 	{
 		std::unique_lock<std::mutex> unique_lock(ctx.notify_worker_threads_mutex);
-		if (are_all_workers_ready)
+
 		{
+			// It's important the workers first acquires ctx.notify_worker_threads_mutex
+			// and then ctx.notify_manager_thread_mutex so the manager waits for the
+			// last one before it asks all of them to start:
+			std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
+			if (--ctx.waiting_workers_count == 0)
 			{
-				// It's important the last worker first acquires ctx.notify_worker_threads_mutex
-				// and then ctx.notify_manager_thread_mutex so the manager waits for it before
-				// it asks all workers to start:
-				std::unique_lock<std::mutex> unique_lock(ctx.notify_manager_thread_mutex);
-				ctx.are_all_workers_ready = are_all_workers_ready;
-				print("Worker with id " << std::this_thread::get_id() << " is the last one");
+				ctx.are_all_workers_ready = true;
 			}
+		}
+
+		if (ctx.waiting_workers_count == 0)
+		{
+			print("Worker with id " << std::this_thread::get_id() << " notifies the manager...");
 			// Since notify_one awakens the manager, the last worker should first release
 			// ctx.notify_manager_thread_mutex before calling notify_one():
 			ctx.notify_manager_thread.notify_one();
 		}
 		print("Worker with id " << std::this_thread::get_id() << " is waiting...");
+
 		// Since a spurious wakeup is possible, it's better stop_waiting (second argument)
 		// is provided:
 		ctx.notify_worker_threads.wait(unique_lock, [](){return ctx.start_execution;});
