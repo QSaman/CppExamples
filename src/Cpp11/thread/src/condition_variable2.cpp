@@ -79,7 +79,6 @@ void work()
 		// Since a spurious wakeup is possible, it's better stop_waiting (second argument)
 		// is provided:
 		ctx.notify_worker_threads.wait(unique_lock, [](){return ctx.start_execution;});
-		print("Worker with id " << std::this_thread::get_id() << " finished waiting...");
 	}
 
 	// All workers competing each other to execute this part first:
@@ -87,7 +86,11 @@ void work()
 	constexpr bool desired = true;
 	if (winner.compare_exchange_strong(expected, desired))
 	{
-		print("Thread with id " << std::this_thread::get_id() << " wins the race!");
+		print("Thread with id " << std::this_thread::get_id() << " won the race!");
+	}
+	else
+	{
+		print("Thread with id " << std::this_thread::get_id() << " lost the race!");
 	}
 }
 
