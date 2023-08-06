@@ -1,3 +1,7 @@
+/// For more information refer to the following links:
+/// https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#cp42-dont-wait-without-a-condition
+/// https://www.modernescpp.com/index.php/c-core-guidelines-be-aware-of-the-traps-of-condition-variables/
+
 #include <array>
 #include <atomic>
 #include <condition_variable>
