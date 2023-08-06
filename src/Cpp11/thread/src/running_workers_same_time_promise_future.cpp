@@ -13,8 +13,8 @@ constexpr std::size_t WORKERS_COUNT = 3;
 struct Context
 {
 	Context() :
-		startExecution(startExecutionPromise.get_future()),
-		workersReady(workersReadyPromise.get_future())
+		startExecution(startExecutionPromise.get_future().share()),
+		workersReady(workersReadyPromise.get_future().share())
 	{
 	}
 
@@ -39,11 +39,14 @@ std::atomic<bool> winner(false);
 void notifyWorkers()
 {
 	print("Waiting for all workers to be ready...");
+	/// One object of shared_future is not thread-safe. Each thread
+	/// should have their own object:
+	auto workersReady = std::shared_future<void>(ctx.workersReady);
 	/// Unlike condition_variable, lost wakeup is not possible in futures.
 	/// In other words, futures have memory. If promise<void>::set_value
 	/// is called before wait(), it knows that the value has been already
 	/// available:
-	ctx.workersReady.wait();
+	workersReady.wait();
 	print("All workers are ready...");
 	print("Notifying all workers to start...");
 	ctx.startExecutionPromise.set_value();
@@ -59,7 +62,10 @@ void work()
 	}
 
 	print("Worker with id " << std::this_thread::get_id() << " is waiting...");
-	ctx.startExecution.wait();
+	/// One object of shared_future is not thread-safe. Each thread
+	/// should have their own object:
+	auto startExecution = std::shared_future<void>(ctx.startExecution);
+	startExecution.wait();
 
 	// All workers competing each other to execute this part first:
 	bool expected = false;
