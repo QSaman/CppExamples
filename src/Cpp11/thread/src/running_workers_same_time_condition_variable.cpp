@@ -1,3 +1,6 @@
+/// For this task using promise and future is a better alternative compare to condition_variable.
+/// Please refer to running_workers_same_time_promise_future.cpp
+///
 /// For more information refer to the following links:
 /// https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#cp42-dont-wait-without-a-condition
 /// https://www.modernescpp.com/index.php/c-core-guidelines-be-aware-of-the-traps-of-condition-variables/
