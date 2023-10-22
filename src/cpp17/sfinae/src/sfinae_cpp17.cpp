@@ -26,7 +26,7 @@ bool areEqual2(Number n1, Number n2)
 	{
 		return n1 == n2;
 	}
-	else if (std::is_floating_point_v<Number>)
+	else if constexpr (std::is_floating_point_v<Number>)
 	{
 		return fabs(n1 - n2) <= 1e-2;
 	}
