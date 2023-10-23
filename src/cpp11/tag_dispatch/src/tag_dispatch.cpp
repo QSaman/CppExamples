@@ -1,7 +1,3 @@
-// Substitution Failure Is Not An Error (SFINAE)
-// https://en.cppreference.com/w/cpp/language/sfinae
-// Please refer to cpp14 and cpp17 versions
-
 #include <cassert>
 #include <cmath>
 #include <iostream>
